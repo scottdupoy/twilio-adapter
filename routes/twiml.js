@@ -16,3 +16,10 @@ exports.handleBrokerChoice = function() {
         response.render('twiml/hang-up', { message: message });
     }
 };
+
+exports.statusCallback = function() {
+    return function(request, response) {
+        console.log('STATUS CALLBACK');
+        response.end();
+    }
+};
