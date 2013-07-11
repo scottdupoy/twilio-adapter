@@ -29,3 +29,10 @@ exports.statusCallback = function() {
         response.end();
     }
 };
+
+exports.handleBrokerMessage = function(keys) {
+    return function(request, response) {
+        console.log('BROKER MESSAGE RECORDED');
+        response.render('twiml/hang-up', { message: 'Your message will be forwarded to a handler. Good bye.' });
+    };
+};

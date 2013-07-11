@@ -41,6 +41,7 @@ app.use(app.router);
 app.post('/twiml/incoming-call', twimlRoutes.incomingCall(config.keys));
 app.post('/twiml/handle-broker-choice', twimlRoutes.handleBrokerChoice(config.keys));
 app.post('/twiml/status-callback', twimlRoutes.statusCallback());
+app.post('/twiml/broker-message', twimlRoutes.handleBrokerMessage());
 app.get('/request.log', function(request, response) {
     response.sendfile(path.join(__dirname, 'request.log'));
 });
