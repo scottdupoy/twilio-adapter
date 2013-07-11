@@ -1,19 +1,25 @@
 
-exports.incomingCall = function() {
+exports.incomingCall = function(keys) {
     return function(request, response) {
-    console.log('INCOMING CALL');
-    response.render('twiml/incoming-initial-response', {});
+        console.log('INCOMING CALL');
+        response.render('twiml/incoming-initial-response', { brokerConnect: keys.brokerConnect, brokerMessage: keys.brokerMessage});
     };
 };
 
-exports.handleBrokerChoice = function() {
+exports.handleBrokerChoice = function(keys) {
     return function(request, response) {
-        console.log('BROKER HAS MADE CHOICE');
-        var message = 'No choice, hanging up.';
-        if (request.body.Digits) {
-            message = 'You pressed ' + request.body.Digits + '. Hanging up';
+        if (request.body.Digits && request.body.Digits == keys.brokerConnect) {
+            console.log('BROKER CHOICE: CONNECT TO HANDLER');
+            response.render('twiml/connecting-to-handler');
         }
-        response.render('twiml/hang-up', { message: message });
+        else if (request.body.Digits && request.body.Digits == keys.brokerMessage) {
+            console.log('BROKER CHOICE: LEAVING A MESSAGE');
+            response.render('twiml/leave-a-message');
+        }
+        else {
+            console.log('BROKER CHOICE: INVALID DIGIT');
+            response.render('twiml/hang-up', { message: 'Invalid option, good bye.' });
+        }        
     }
 };
 

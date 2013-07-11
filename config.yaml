@@ -1,3 +1,7 @@
 http:
-  listenHost: 0.0.0.0
-  listenPort: 8000
+    listenHost: 0.0.0.0
+    listenPort: 8000
+
+keys:
+    brokerConnect: 1
+    brokerMessage: 2
