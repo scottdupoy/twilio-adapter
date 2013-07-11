@@ -1,0 +1,3 @@
+http:
+  listenHost: localhost
+  listenPort: 3000
