@@ -1,4 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<Response>
-  <Say>Please wait while we connect you</Say>
+<Response>                                                                                                
+    <Gather action='/twiml/handle-broker-choice' timeout='15' method='POST' numDigits='1'>                             
+        <Say>                                                                                             
+            Press 1 to be connected to a handler or press 2 to leave a message                            
+        </Say>                                                                                            
+    </Gather>                                                                                             
 </Response>

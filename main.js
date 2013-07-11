@@ -39,6 +39,7 @@ app.use(express.errorHandler());
 
 // routes
 app.post('/twiml/incoming-call', twimlRoutes.incomingCall());
+app.post('/twiml/handle-broker-choice', twimlRoutes.handleBrokerChoice());
 
 // start the server
 var port = config.http.listenPort;
