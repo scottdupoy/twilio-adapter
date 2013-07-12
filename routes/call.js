@@ -20,51 +20,17 @@ exports.call = function() {
             to: request.body.To,
             from: request.body.From
          }, function(errResponse, callResponse) {
-            console.log('    CALLBACK INVOKED');
-            var message = 'UNKNOWN';
-            try {
-                console.log('      logging parameters');
-                if (errResponse) {
-                    console.log('    >> LOGGING errResponse');
-                    console.log('      errResponse:  ' + JSON.stringify({ ErrorResponse: errResponse }));
-                    console.log('    >> LOGGED errResponse');
-                }
-                if (callResponse) {
-                    console.log('    >> LOGGING callResponse');
-                    console.log('      callResponse: ' + JSON.stringify({ CallResponse: callResponse }));
-                    console.log('    >> LOGGED callResponse');
-                }
-                console.log('      logged parameters');
-                if (errResponse) {
-                    message = 'ERROR INITIATING CALL: ' + JSON.stringify({ ErrorResponse: errResponse });
-                }
-                else if (callResponse) {
-                    message = 'INITIATED CALL: ' + JSON.stringify({ CallResponse: callResponse });
-                }
+            var message = '';
+            if (errResponse) {
+
+                message = 'ERROR INITIATING CALL: ' + JSON.stringify(errResponse);
             }
-            catch (e) {
-                message = 'ERROR: ' + JSON.stringify({ Error: e });
+            else {
+                message = 'CALL TO ' + request.body.To + ' INITIATED SUCCESSFULLY';
             }
-            console.log('    END OF TRY/CATCH CLAUSE');
-                
-            response.end('call initiation response: ' + message);        
+            console.log('CALL INITIATION RESULT: ' + message);
+            response.end(message);
         });
     }    
 }
 
-/*
-
-
-
-// Download the Node helper library from twilio.com/docs/node/install
-// These vars are your accountSid and authToken from twilio.com/user/account
-var client = require('twilio')(accountSid, authToken);
- 
-client.calls.create({
-    url: "http://demo.twilio.com/docs/voice.xml",
-    to: "+14155551212",
-    from: "+14158675309"
-}, function(err, call) {
-    process.stdout.write(call.sid);
-});
-*/
