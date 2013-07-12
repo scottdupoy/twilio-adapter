@@ -10,6 +10,7 @@ var config = require(path.join(__dirname, 'config.yaml'));
 
 // local dependencies
 var twimlRoutes = require('./routes/twiml');
+var callRoutes = require('./routes/call');
 var bodyLogger = require('./middleware/bodyLogger');
 
 // main app
@@ -38,10 +39,12 @@ app.use(function(req, res, next) {
 app.use(app.router);
 
 // routes
+app.post('/call', callRoutes.call());
 app.post('/twiml/incoming-call', twimlRoutes.incomingCall(config.keys));
 app.post('/twiml/handle-broker-choice', twimlRoutes.handleBrokerChoice(config.keys));
 app.post('/twiml/status-callback', twimlRoutes.statusCallback());
 app.post('/twiml/broker-message', twimlRoutes.handleBrokerMessage());
+app.post('/twiml/handler-contacted', twimlRoutes.handleHandlerContacted());
 app.get('/request.log', function(request, response) {
     response.sendfile(path.join(__dirname, 'request.log'));
 });
