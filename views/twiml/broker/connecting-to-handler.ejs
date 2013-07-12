@@ -1,7 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <Response>                      
     <Say>
-        Connecting to handler. To do and remove hang up.
+        Connecting to handler. Please hold.
     </Say>
-    <Hangup/>
+    <Dial>
+        <Conference endConferenceOnExit='true'>
+            <%= conferenceRoomId %>
+        </Conference>
+    </Dial>
 </Response>

@@ -3,5 +3,9 @@
     <Say>
         Broker call accepted. You will now be put through.
     </Say>
-    <Hangup/>
+    <Dial>
+        <Conference endConferenceOnExit='true'>
+            <%= conferenceRoomId %>
+        </Conference>
+    </Dial>
 </Response>

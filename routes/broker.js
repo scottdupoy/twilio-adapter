@@ -10,7 +10,8 @@ exports.handleChoice = function(keys) {
     return function(request, response) {
         if (request.body.Digits && request.body.Digits == keys.brokerConnect) {
             console.log('BROKER CHOICE: CONNECT TO HANDLER');
-            response.render('twiml/broker/connecting-to-handler');
+            console.log('TODO: DO NOT HARD-CODE THIS CONFERENCE ID');
+            response.render('twiml/broker/connecting-to-handler', { conferenceRoomId: 'bridge1234' });
         }
         else if (request.body.Digits && request.body.Digits == keys.brokerMessage) {
             console.log('BROKER CHOICE: LEAVING A MESSAGE');

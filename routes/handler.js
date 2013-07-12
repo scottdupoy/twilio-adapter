@@ -97,7 +97,8 @@ function handlerAccepted(request, response, type, data) {
             break;
             
         case "connect":
-            response.render('twiml/handler/accepted-broker-connection');
+            console.log('TODO: DO NOT HARD-CODE CONFERENCE ROOM ID');
+            response.render('twiml/handler/accepted-broker-connection', { conferenceRoomId: 'bridge1234' });
             break;
         
         case "message":
