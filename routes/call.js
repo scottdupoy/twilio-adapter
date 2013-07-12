@@ -21,9 +21,8 @@ exports.call = function() {
         twilio.makecall({
             url: callback,
             to: request.body.to,
-            from: request.body.from,
-            status_callback: request.body.StatusCallback,
-            status_callback_method: 'POST'
+            from: request.body.from
+            /*status_callback: request.body.StatusCallback*/
          }, function(errresponse, callresponse) {
             var message = '';
             if (errresponse) {
