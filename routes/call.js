@@ -21,8 +21,8 @@ exports.call = function() {
             from: request.body.from
          }, function(err, call) {
             console.log('    callback invoked');
-            console.log('      err:  ' + json.stringify({ err: err }));
-            console.log('      call: ' + json.stringify({ call: call }));
+            console.log('      err:  ' + JSON.stringify({ err: err }));
+            console.log('      call: ' + JSON.stringify({ call: call }));
             response.end('called: ' + request.body.to);        
         });
     }    
