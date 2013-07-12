@@ -17,22 +17,23 @@ exports.call = function() {
         var callback = request.body.Host + '/twiml/handler/contacted/' + request.body.Type + '/' + request.body.Data;
         console.log('  CALLBACK:    ' + callback);
         
-        var twilio = require('twilio')(request.body.accountsid, request.body.authtoken);
-        twilio.makecall({
+        var twilio = require('twilio')(request.body.AccountSid, request.body.AuthToken);
+        twilio.makeCall({
             url: callback,
-            to: request.body.to,
-            from: request.body.from
-            /*status_callback: request.body.StatusCallback*/
-         }, function(errresponse, callresponse) {
+            to: request.body.To,
+            from: request.body.From,
+            status_callback: request.body.StatusCallback,
+            status_callback_method: 'POST'
+         }, function(errResponse, callResponse) {
             var message = '';
-            if (errresponse) {
-                message = 'error initiating call: ' + json.stringify(errresponse);
+            if (errResponse) {
+                message = 'ERROR INITIATING CALL: ' + JSON.stringify(errResponse);
             }
             else {
-                message = 'call to ' + request.body.to + ' initiated successfully';
+                message = 'CALL TO ' + request.body.To + ' INITIATED SUCCESSFULLY';
             }
-            console.log('call initiation result: ' + message);
+            console.log('CALL INITIATION RESULT: ' + message);
             response.end(message);
-         });
+        });
     }    
 }
