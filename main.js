@@ -43,13 +43,15 @@ app.use(app.router);
 // routes
 app.post('/call', callRoutes.call());
 
+app.post('/twiml/status-callback', generalRoutes.handleStatusCallback());
+
 app.post('/twiml/broker/incoming-call', brokerRoutes.handleIncomingCall(config.keys));
 app.post('/twiml/broker/handle-choice', brokerRoutes.handleChoice(config.keys));
 app.post('/twiml/broker/handle-message', brokerRoutes.handleMessage());
 
-app.post('/twiml/status-callback', generalRoutes.handleStatusCallback());
-
-app.post('/twiml/handler/contacted/:type/:data', handlerRoutes.handleHandlerContacted(config.keys));
+app.post('/twiml/handler/contacted/:type/:data', handlerRoutes.handleContacted(config.keys));
+app.post('/twiml/handler/choice/:type/:data', handlerRoutes.handleChoice(config.keys));
+app.post('/twiml/handler/replay-broker-message/:data', handlerRoutes.handleReplayBrokerMessage());
 
 app.get('/request.log', function(request, response) {
     response.sendfile(path.join(__dirname, 'request.log'));

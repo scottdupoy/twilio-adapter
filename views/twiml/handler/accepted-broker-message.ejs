@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Response>                                                                                                
+    <Say>
+        Broker message accepted. Playing message.
+    </Say>
+    <Play><%= messageUrl %></Play>
+    <Say>
+        Broker message finished.
+    </Say>                                                                                              
+    <Gather action='/twiml/handler/replay-broker-message/<%= data %>' timeout='12' method='POST' numDigits='1'>                             
+        <Say>                                                                                             
+            Press any key to replay the message or hang-up to finish.
+        </Say>                                                                                            
+    </Gather>
+    <Hangup/>
+</Response>
