@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <Response>                                                                                                
-    <Gather action='/twiml/handle-broker-choice' timeout='12' method='POST' numDigits='1'>                             
+    <Gather action='/twiml/handler/accept-result/<%= type %>/<%= data %>' timeout='15' method='POST' numDigits='1'>                             
         <Say>                                                                                             
-            Press <%= brokerConnect %> to be connected to a handler or press <%= brokerMessage %> to leave a message.                           
+            <%= message %> Please press <%= handlerAccept %> to accept, <%= handlerReject %> to reject or hang up if you do not work for Altis.
         </Say>                                                                                            
     </Gather>
     <Say>

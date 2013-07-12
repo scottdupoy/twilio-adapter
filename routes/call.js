@@ -11,7 +11,7 @@ exports.call = function() {
         console.log('  ACCOUNT SID: ' + request.body.AccountSid);
         console.log('  AUTH TOKEN:  ' + request.body.AuthToken);
         
-        var callback = request.body.Host + '/twiml/handler-contacted?holy=toast';
+        var callback = request.body.Host + '/twiml/handler/contacted?holy=toast';
         console.log('  CALLBACK:    ' + callback);
         
         var twilio = require('twilio')(request.body.AccountSid, request.body.AuthToken);

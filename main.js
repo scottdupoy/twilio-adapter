@@ -9,7 +9,9 @@ var yaml = require('js-yaml');
 var config = require(path.join(__dirname, 'config.yaml'));
 
 // local dependencies
-var twimlRoutes = require('./routes/twiml');
+var generalRoutes = require('./routes/general');
+var brokerRoutes = require('./routes/broker');
+var handlerRoutes = require('./routes/handler');
 var callRoutes = require('./routes/call');
 var bodyLogger = require('./middleware/bodyLogger');
 
@@ -40,11 +42,15 @@ app.use(app.router);
 
 // routes
 app.post('/call', callRoutes.call());
-app.post('/twiml/incoming-call', twimlRoutes.incomingCall(config.keys));
-app.post('/twiml/handle-broker-choice', twimlRoutes.handleBrokerChoice(config.keys));
-app.post('/twiml/status-callback', twimlRoutes.statusCallback());
-app.post('/twiml/broker-message', twimlRoutes.handleBrokerMessage());
-app.post('/twiml/handler-contacted/:type/:data', twimlRoutes.handleHandlerContacted());
+
+app.post('/twiml/broker/incoming-call', brokerRoutes.handleIncomingCall(config.keys));
+app.post('/twiml/broker/handle-choice', brokerRoutes.handleChoice(config.keys));
+app.post('/twiml/broker/handle-message', brokerRoutes.handleMessage());
+
+app.post('/twiml/status-callback', generalRoutes.handleStatusCallback());
+
+app.post('/twiml/handler/contacted/:type/:data', handlerRoutes.handleHandlerContacted(config.keys));
+
 app.get('/request.log', function(request, response) {
     response.sendfile(path.join(__dirname, 'request.log'));
 });

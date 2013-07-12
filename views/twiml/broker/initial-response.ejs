@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Response>                                                                                                
+    <Gather action='/twiml/broker/handle-choice' timeout='12' method='POST' numDigits='1'>
+        <Say>                                                                                             
+            Press <%= brokerConnect %> to be connected to a handler or press <%= brokerMessage %> to leave a message.                           
+        </Say>                                                                                            
+    </Gather>
+    <Say>
+        No response detected, good bye.
+    </Say>
+    <Hangup/>
+</Response>

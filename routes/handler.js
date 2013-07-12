@@ -67,20 +67,20 @@ exports.handleHandlerContacted = function(keys) {
             data: data
         };
         
-        else if (type == "alert") {
+        if (type == "alert") {
             console.log('TODO: NEED TO ADD ALERT MESSAGE');
             parameters["message"] = 'An Altis alert has occurred. Message goes here.'; 
-            response.render('twiml/accept', parameters);
+            response.render('twiml/handler/accept', parameters);
         }
         else if (type == "connect") {
             parameters["message"] = 'An Altis broker is waiting to speak with a handler.'; 
-            response.render('twiml/accept', parameters);
+            response.render('twiml/handler/accept', parameters);
         }
         else if (type == "message") {
             parameters["message"] = 'An Altis broker has left a message.'; 
-            response.render('twiml/accept', parameters);
+            response.render('twiml/handler/accept', parameters);
         }
-        else 
+        else {
             console.log('ERROR: UNKNOWN CONTACT REASON HAS BEEN USED');
             response.render('twiml/hang-up', { message: 'Sorry, unknown contact reason has been used. Good bye.' });
         }        
