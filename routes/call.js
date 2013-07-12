@@ -21,12 +21,12 @@ exports.call = function() {
             from: request.body.From
          }, function(err, call) {
             console.log('    CALLBACK INVOKED');
-            string message = 'UNKNOWN';
+            var message = 'UNKNOWN';
             
             try {
                 console.log('      logging parameters');
-                console.log('      err:  ' + JSON.stringify({ Err: err}));
-                console.log('      call: ' + JSON.stringify({ Call: call));
+                console.log('      err:  ' + JSON.stringify({ Err: err }));
+                console.log('      call: ' + JSON.stringify({ Call: call }));
                 console.log('      logged parameters');
                 if (err) {
                     message = 'ERROR INITIATING CALL: ' + JSON.stringify({ Error: err });
