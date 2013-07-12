@@ -19,20 +19,23 @@ exports.call = function() {
             url: callback,
             to: request.body.To,
             from: request.body.From
-         }, function(err, call) {
+         }, function(errResponse, callResponse) {
             console.log('    CALLBACK INVOKED');
             var message = 'UNKNOWN';
-            
             try {
                 console.log('      logging parameters');
-                console.log('      err:  ' + JSON.stringify({ Err: err }));
-                console.log('      call: ' + JSON.stringify({ Call: call }));
-                console.log('      logged parameters');
-                if (err) {
-                    message = 'ERROR INITIATING CALL: ' + JSON.stringify({ Error: err });
+                if (errResponse) {
+                    console.log('      errResponse:  ' + JSON.stringify({ ErrorResponse: errResponse }));
                 }
-                else {
-                    message = 'INITIATED CALL: ' + JSON.stringify({ Call: call });
+                if (callResposne) {
+                    console.log('      callResponse: ' + JSON.stringify({ CallResponse: callResponse }));
+                }
+                console.log('      logged parameters');
+                if (errResponse) {
+                    message = 'ERROR INITIATING CALL: ' + JSON.stringify({ ErrorResponse: errResponse });
+                }
+                else if (callResponse) {
+                    message = 'INITIATED CALL: ' + JSON.stringify({ CallResponse: callResponse });
                 }
             }
             catch (e) {
