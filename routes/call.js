@@ -17,8 +17,8 @@ exports.call = function() {
         var twilio = require('twilio')(request.body.AccountSid, request.body.AuthToken);
         twilio.makeCall({
             url: callback,
-            to: request.body.to,
-            from: request.body.from
+            to: request.body.To,
+            from: request.body.From
          }, function(err, call) {
             console.log('    callback invoked');
             console.log('      err:  ' + JSON.stringify({ err: err }));
