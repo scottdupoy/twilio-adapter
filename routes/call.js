@@ -39,7 +39,7 @@ exports.call = function() {
                 }
             }
             catch (e) {
-                message = 'ERROR';
+                message = 'ERROR: ' + JSON.stringify({ Error: e });
             }
             console.log('    END OF TRY/CATCH CLAUSE');
                 
