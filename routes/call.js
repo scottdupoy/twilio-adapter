@@ -22,7 +22,6 @@ exports.call = function() {
          }, function(errResponse, callResponse) {
             var message = '';
             if (errResponse) {
-
                 message = 'ERROR INITIATING CALL: ' + JSON.stringify(errResponse);
             }
             else {

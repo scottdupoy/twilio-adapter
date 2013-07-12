@@ -5,3 +5,5 @@ http:
 keys:
     brokerConnect: 1
     brokerMessage: 2
+    handlerAccept: 1
+    handlerReject: 2

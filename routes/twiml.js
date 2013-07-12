@@ -46,11 +46,57 @@ exports.handleBrokerMessage = function(keys) {
     };
 };
 
-exports.handleHandlerContacted = function() {
-    return function(request, response) {
-        console.log('HANDLER CONTACTED');
-        console.log('  HOLY: ' + request.body.holy);
-        response.render('twiml/hang-up', { message: 'You have been contacted using node code. Good bye.' });
+exports.handleHandlerContacted = function(keys) {
+    return function(request, response) {    
+        console.log('HANDLER CONTACTED');        
+        var type = request.params.type;
+        var data = request.params.data;
+        if (!type || !data) {
+            console.log('ERROR: MISSING TYPE OR DATA');
+            response.render('twiml/hang-up', { message: 'Sorry, contact reasons are missing. Good bye.' });
+            return;
+        }
+                
+        console.log('  type: ' + type);
+        console.log('  data: ' + data);
+        
+        var parameters = {
+            handlerAccept: keys.handlerAccept,
+            handlerReject: keys.handlerReject,
+            type: type,
+            data: data
+        };
+        
+        else if (type == "alert") {
+            console.log('TODO: NEED TO ADD ALERT MESSAGE');
+            parameters["message"] = 'An Altis alert has occurred. Message goes here.'; 
+            response.render('twiml/accept', parameters);
+        }
+        else if (type == "connect") {
+            parameters["message"] = 'An Altis broker is waiting to speak with a handler.'; 
+            response.render('twiml/accept', parameters);
+        }
+        else if (type == "message") {
+            parameters["message"] = 'An Altis broker has left a message.'; 
+            response.render('twiml/accept', parameters);
+        }
+        else 
+            console.log('ERROR: UNKNOWN CONTACT REASON HAS BEEN USED');
+            response.render('twiml/hang-up', { message: 'Sorry, unknown contact reason has been used. Good bye.' });
+        }        
     };
 };
-
+/*
+<?xml version='1.0' encoding='UTF-8'?>
+<Response>                                                                                                
+    <Gather action='/twiml/handler/accept-result/<%= type %>/<%= data %>' timeout='12' method='POST' numDigits='1'>                             
+        <Say>                                                                                             
+            <%= message => Please press <%= handlerAccept %> to accept, <%= handlerReject %> to reject or hang up if you do not work for Altis.
+        </Say>                                                                                            
+    </Gather>
+    <Say>
+        No response detected, good bye.
+    </Say>
+    <Hangup/>
+</Response>
+*/
