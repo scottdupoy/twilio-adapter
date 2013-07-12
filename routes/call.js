@@ -14,9 +14,8 @@ exports.call = function() {
         var callback = request.body.Host + '/twiml/handler-contacted?holy=toast';
         console.log('  CALLBACK:    ' + callback);
         
-        
-        var twilio = require('twilio')(request.body.accountsid, request.body.authtoken);
-        twilio.calls.create({
+        var twilio = require('twilio')(request.body.AccountSid, request.body.AuthToken);
+        twilio.makeCall({
             url: callback,
             to: request.body.to,
             from: request.body.from
