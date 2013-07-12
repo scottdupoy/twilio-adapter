@@ -20,10 +20,27 @@ exports.call = function() {
             to: request.body.To,
             from: request.body.From
          }, function(err, call) {
-            console.log('    callback invoked');
-            console.log('      err:  ' + JSON.stringify({ err: err }));
-            console.log('      call: ' + JSON.stringify({ call: call }));
-            response.end('called: ' + request.body.to);        
+            console.log('    CALLBACK INVOKED');
+            string message = 'UNKNOWN';
+            
+            try {
+                console.log('      logging parameters');
+                console.log('      err:  ' + JSON.stringify({ Err: err}));
+                console.log('      call: ' + JSON.stringify({ Call: call));
+                console.log('      logged parameters');
+                if (err) {
+                    message = 'ERROR INITIATING CALL: ' + JSON.stringify({ Error: err });
+                }
+                else {
+                    message = 'INITIATED CALL: ' + JSON.stringify({ Call: call });
+                }
+            }
+            catch (e) {
+                message = 'ERROR';
+            }
+            console.log('    END OF TRY/CATCH CLAUSE');
+                
+            response.end('call initiation response: ' + message);        
         });
     }    
 }
