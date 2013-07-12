@@ -25,10 +25,14 @@ exports.call = function() {
             try {
                 console.log('      logging parameters');
                 if (errResponse) {
+                    console.log('    >> LOGGING errResponse');
                     console.log('      errResponse:  ' + JSON.stringify({ ErrorResponse: errResponse }));
+                    console.log('    >> LOGGED errResponse');
                 }
-                if (callResposne) {
+                if (callResponse) {
+                    console.log('    >> LOGGING callResponse');
                     console.log('      callResponse: ' + JSON.stringify({ CallResponse: callResponse }));
+                    console.log('    >> LOGGED callResponse');
                 }
                 console.log('      logged parameters');
                 if (errResponse) {
