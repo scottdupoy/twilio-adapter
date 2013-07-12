@@ -20,10 +20,11 @@ exports.call = function() {
         var twilio = require('twilio')(request.body.AccountSid, request.body.AuthToken);
         twilio.makeCall({
             url: callback,
+            method: 'POST',
             to: request.body.To,
             from: request.body.From,
-            status_callback: request.body.StatusCallback,
-            status_callback_method: 'POST'
+            statusCallback: request.body.StatusCallback,
+            statusCallbackMethod: 'POST'
          }, function(errResponse, callResponse) {
             var message = '';
             if (errResponse) {
