@@ -33,7 +33,8 @@ exports.call = function() {
                 message = 'CALL TO ' + request.body.To + ' INITIATED SUCCESSFULLY';
             }
             console.log('CALL INITIATION RESULT: ' + message);
-            response.end(message);
+            //response.end(message);
         });
+        response.end('async call initiated');
     }    
 }
