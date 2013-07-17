@@ -1,9 +1,11 @@
 //scott:todo:timestamps
 
+var logger = require('./logger');
+
 exports.newBrokerCallWaiting = function(exchange) {
     if (exchange) {
         return function(callId, conferenceRoomId) {
-            console.log('Publishing NewBrokerCallWaitingEvent');
+            logger.info('publisher: Publishing NewBrokerCallWaitingEvent: callId: ' + callId + ', conferenceRoomId: ' + conferenceRoomId);
             exchange.publish('Twilio.NewBrokerCallWaiting', {
                 "$type": 'Altis.AlertHandler.Messages.Twilio.NewBrokerCallWaitingEvent, Altis.AlertHandler.Messages',
                 'CallId': callId,
@@ -12,7 +14,7 @@ exports.newBrokerCallWaiting = function(exchange) {
         };
     }
     return function(callId, conferenceRoomId) {
-        console.log('WARN: configured not to send NewBrokerCallWaitingEvent');
+        logger.warn('publisher: configured not to send NewBrokerCallWaitingEvent');
     };
 };
 
@@ -22,7 +24,7 @@ exports.callEnded = function(exchange) {
             // need to know if a broker hangs up or when a handler hangs
             // up so that we can call the next handler if necessary
             // (basically so synchronous handler calls can be made)
-            console.log('Publishing CallEndedEvent');
+            logger.info('publisher: Publishing CallEndedEvent: callId: ' + callId + ', from: ' + from + ', to: ' + to + ', direction ' + direction + ', callStatus: ' + callStatus);
             exchange.publish('Twilio.CallEnded', {
                 "$type": 'Altis.AlertHandler.Messages.Twilio.CallEndedEvent, Altis.AlertHandler.Messages',
                 'CallId': callId,
@@ -34,7 +36,7 @@ exports.callEnded = function(exchange) {
         };
     }
     return function(callId, from, to, direction, callStatus) {
-        console.log('WARN: configured not to send CallEndedEvent');
+        logger.warn('publisher: configured not to send CallEndedEvent');
     };
 };
 
@@ -42,7 +44,7 @@ exports.newBrokerMessage = function(exchange) {
     if (exchange) {
         return function(callId, messageRecordingUrl) {
             // call-id not really necessary
-            console.log('Publishing NewBrokerMessageEvent');
+            logger.info('publisher: Publishing NewBrokerMessageEvent, callId: ' + callId + ', messageRecordingUrl: ' + messageRecordingUrl);
             exchange.publish('Twilio.NewBrokerMessage', {
                 "$type": 'Altis.AlertHandler.Messages.Twilio.NewBrokerMessageEvent, Altis.AlertHandler.Messages',
                 'CallId': callId,
@@ -51,14 +53,14 @@ exports.newBrokerMessage = function(exchange) {
         };
     }
     return function(callId, messageRecordingUrl) {
-        console.log('WARN: configured not to send NewBrokerMessageEvent');
+        logger.warn('publisher: configured not to send NewBrokerMessageEvent');
     };
 };
 
 exports.handlerAccepted = function(exchange) {
     if (exchange) {
         return function(callId, to) {
-            console.log('Publishing HandlerAcceptedEvent');
+            logger.info('publisher: Publishing HandlerAcceptedEvent, callId: ' + callId + ', to: ' + to);
             exchange.publish('Twilio.HandlerAccepted', {
                 "$type": 'Altis.AlertHandler.Messages.Twilio.HandlerAcceptedEvent, Altis.AlertHandler.Messages',
                 'CallId': callId,
@@ -67,14 +69,14 @@ exports.handlerAccepted = function(exchange) {
         };
     }
     return function(callId, to) {
-        console.log('WARN: configured not to send HandlerAcceptedEvent');
+        logger.warn('publisher: configured not to send HandlerAcceptedEvent');
     };
 };
 
 exports.handlerRejected = function(exchange) {
     if (exchange) {
         return function(callId, to) {
-            console.log('Publishing HandlerRejectedEvent');
+            logger.info('publisher: Publishing HandlerRejectedEvent, callId: ' + callId + ', to: ' + to);
             exchange.publish('Twilio.HandlerRejected', {
                 "$type": 'Altis.AlertHandler.Messages.Twilio.HandlerRejectedEvent, Altis.AlertHandler.Messages',
                 'CallId': callId,
@@ -83,6 +85,6 @@ exports.handlerRejected = function(exchange) {
         };
     }
     return function(callId, to) {
-        console.log('WARN: configured not to send HandlerRejectedEvent');
+        logger.warn('publisher: configured not to send HandlerRejectedEvent');
     };
 };
