@@ -9,6 +9,7 @@ keys:
     handlerReject: 2
 
 rabbitMq:
+  enabled: false
   server: localhost
   port: 5672
   vhost: /

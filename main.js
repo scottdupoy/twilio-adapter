@@ -44,18 +44,26 @@ app.use(function(req, res, next) {
 });
 app.use(app.router);
 
-// start the amqp connection, starting the server when it's ready
-var brokerConnection = amqp.createConnection({
-    host: config.rabbitMq.server,
-    port: config.rabbitMq.port,
-    login: config.rabbitMq.user,
-    password: config.rabbitMq.password,
-    vhost: config.rabbitMq.vhost
-});
+// only start the amqp stuff if configured to do so
+if (config.rabbitMq.enabled) {
+    console.log('starting amqp connection');
+    // start the amqp connection, starting the server when it's ready
+    var brokerConnection = amqp.createConnection({
+        host: config.rabbitMq.server,
+        port: config.rabbitMq.port,
+        login: config.rabbitMq.user,
+        password: config.rabbitMq.password,
+        vhost: config.rabbitMq.vhost
+    });
 
-brokerConnection.on('ready', function() {
-    exchange = brokerConnection.exchange(config.rabbitMq.exchange, { type: 'direct' }, startServer);
-});
+    brokerConnection.on('ready', function() {
+        exchange = brokerConnection.exchange(config.rabbitMq.exchange, { type: 'direct' }, startServer);
+    });
+}
+else {    
+    console.log('not using amqp connection');
+    startServer();
+}
 
 function startServer() {
     // routes
