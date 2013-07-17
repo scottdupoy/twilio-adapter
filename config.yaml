@@ -7,3 +7,11 @@ keys:
     brokerMessage: 2
     handlerAccept: 1
     handlerReject: 2
+
+rabbitMq:
+  server: localhost
+  port: 5672
+  vhost: /
+  user: guest
+  password: guest
+  exchange: Altis.AlertHandler

@@ -10,12 +10,17 @@ exports.handleContacted = function(keys) {
             return;
         }                
         console.log('  type: ' + type);
+        // alert special case for query string encoding extra message
+        var message = request.query["message"];
+        if (message) {
+            data = data + '?message=' + encodeURIComponent(message);
+        }
         console.log('  data: ' + data);
-        renderHandlerChoice(response, type, data, keys, '');        
+        renderHandlerChoice(response, type, data, message, keys, '');
     };
 };
 
-exports.handleChoice = function(keys) {
+exports.handleChoice = function(keys, publishHandlerAccepted, publishHandlerRejected) {
     return function(request, response) {  
         console.log('HANDLER CHOICE');        
         var type = request.params.type;
@@ -30,15 +35,21 @@ exports.handleChoice = function(keys) {
 
         if (request.body.Digits && request.body.Digits == keys.handlerAccept) {
             console.log('HANDLER CHOICE: ACCEPT');
+            publishHandlerAccepted(request.body.CallSid, request.body.To);
             handlerAccepted(request, response, type, data);
         }
         else if (request.body.Digits && request.body.Digits == keys.handlerReject) {
             console.log('HANDLER CHOICE: REJECT');
+            publishHandlerRejected(request.body.CallSid, request.body.To);
             response.render('twiml/hang-up', { message: 'Rejected. The system will contact the next handler.' });
         }
         else {
             console.log('HANDLER CHOICE: INVALID DIGIT');
-            renderHandlerChoice(response, type, data, keys, 'Unrecognised response, please try again. ');
+            var query = require('url').parse(request.url).query;
+            if (query) {
+                data += '?' + query;
+            }
+            renderHandlerChoice(response, type, data, request.query["message"], keys, 'Unrecognised response, please try again. ');
         }
     };
 };
@@ -56,7 +67,7 @@ exports.handleReplayBrokerMessage = function() {
     };
 };
 
-function renderHandlerChoice(response, type, data, keys, messagePrefix) {    
+function renderHandlerChoice(response, type, data, alertMessage, keys, messagePrefix) {    
     var parameters = {
         handlerAccept: keys.handlerAccept,
         handlerReject: keys.handlerReject,
@@ -67,8 +78,10 @@ function renderHandlerChoice(response, type, data, keys, messagePrefix) {
     switch (type) {
     
         case "alert":
-            console.log('TODO: NEED TO ADD ALERT MESSAGE');
-            parameters["message"] = messagePrefix + 'An Altis alert has occurred. Message goes here.'; 
+            parameters["message"] = messagePrefix + 'An Altis alert has occurred.';
+            if (alertMessage) {
+                parameters["message"] += ' ' + alertMessage + '.';
+            }
             response.render('twiml/handler/contacted', parameters);
             break;
             

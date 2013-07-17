@@ -15,25 +15,25 @@ exports.call = function() {
         console.log('  AUTH TOKEN:      ' + request.body.AuthToken);
         
         var callback = request.body.Host + '/twiml/handler/contacted/' + request.body.Type + '/' + request.body.Data;
-        console.log('  CALLBACK:    ' + callback);
+        console.log('  CALLBACK:        ' + callback);
         
-        var twilio = require('twilio')(request.body.AccountSid, request.body.AuthToken);
-        twilio.makeCall({
+        var twilio = require('twilio')(request.body.accountsid, request.body.authtoken);
+        twilio.makecall({
             url: callback,
-            method: 'POST',
-            to: request.body.To,
-            from: request.body.From,
-            statusCallback: request.body.StatusCallback,
-            statusCallbackMethod: 'POST'
-         }, function(errResponse, callResponse) {
+            method: 'post',
+            to: request.body.to,
+            from: request.body.from,
+            statuscallback: request.body.statuscallback,
+            statuscallbackmethod: 'post'
+         }, function(errresponse, callresponse) {
             var message = '';
-            if (errResponse) {
-                message = 'ERROR INITIATING CALL: ' + JSON.stringify(errResponse);
+            if (errresponse) {
+                message = 'error initiating call: ' + json.stringify(errresponse);
             }
             else {
-                message = 'CALL TO ' + request.body.To + ' INITIATED SUCCESSFULLY';
+                message = 'call to ' + request.body.to + ' initiated successfully';
             }
-            console.log('CALL INITIATION RESULT: ' + message);
+            console.log('call initiation result: ' + message);
             response.end(message);
         });
     }    
