@@ -17,3 +17,16 @@ exports.handleStatusCallback = function(publishCallEnded) {
         response.end();
     }
 };
+
+exports.handleHangUp = function()
+{
+    return function(request, response) {
+        var message = request.query["message"];
+        if (message == null || message.length == 0)
+        {
+            // default message
+            message = 'The issue has been resolved or the broker has hung up. Good bye.'
+        }               
+        response.render('twiml/hang-up', { message: message });
+    }
+};

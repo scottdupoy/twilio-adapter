@@ -86,6 +86,7 @@ function startServer() {
     app.post('/twiml/handler/contacted/:type/:data', handlerRoutes.handleContacted(config.keys));
     app.post('/twiml/handler/choice/:type/:data', handlerRoutes.handleChoice(config.keys, publisher.handlerAccepted(exchange), publisher.handlerRejected(exchange)));
     app.post('/twiml/handler/replay-broker-message/:data', handlerRoutes.handleReplayBrokerMessage());
+    app.post('/twiml/hang-up-redirect', generalRoutes.handleHangUp());
     
     // only error handler
     app.use(express.errorHandler());

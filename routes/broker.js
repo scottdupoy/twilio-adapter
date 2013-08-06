@@ -43,4 +43,3 @@ exports.handleMessage = function(publishNewBrokerMessage) {
         }
     };
 };
-
