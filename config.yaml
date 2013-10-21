@@ -8,6 +8,9 @@ keys:
     handlerAccept: 1
     handlerReject: 2
 
+company:
+    name: 'TestCompany'
+    
 rabbitMq:
   enabled: true
   server: localhost
@@ -15,13 +18,14 @@ rabbitMq:
   vhost: /
   user: guest
   password: guest
-  exchange: Altis.AlertHandler
+  exchange: DummyExchange
+  connectionRetryInterval: 1000
 
 # log4net equivalent log levels can be debug, info, warn, error (no fatal in winston)
 logger:
   file:
     enabled: true
-    path: C:\Altis\Logs\twilio-adapter.log
+    path: C:\Temp\twilio-adapter.log
     level: debug
   console:
     enabled: true

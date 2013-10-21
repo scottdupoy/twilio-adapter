@@ -1,7 +1,7 @@
 
 var logger = require('../utils/logger');
 
-exports.handleContacted = function(keys) {
+exports.handleContacted = function(config) {
     return function(request, response) {       
         var type = request.params.type;
         var data = request.params.data;
@@ -17,11 +17,11 @@ exports.handleContacted = function(keys) {
             logger.info('handler-contact: alert message part of querystring: ' + message);
             data = data + '?message=' + encodeURIComponent(message);
         }
-        renderHandlerChoice(response, type, data, message, keys, '');
+        renderHandlerChoice(response, type, data, message, config, '');
     };
 };
 
-exports.handleChoice = function(keys, publishHandlerAccepted, publishHandlerRejected) {
+exports.handleChoice = function(config, publisher) {
     return function(request, response) {
         var type = request.params.type;
         var data = request.params.data;
@@ -32,14 +32,14 @@ exports.handleChoice = function(keys, publishHandlerAccepted, publishHandlerReje
             return;
         }
 
-        if (request.body.Digits && request.body.Digits == keys.handlerAccept) {
+        if (request.body.Digits && request.body.Digits == config.keys.handlerAccept) {
             logger.info('handler-contact: accepted, to: ' + request.body.To + ', type: ' + type + ', data: ' + data + ' , CallSid: ' + request.body.CallSid);
-            publishHandlerAccepted(request.body.CallSid, request.body.To);
+            publisher.publishHandlerAccepted(request.body.CallSid, request.body.To);
             handlerAccepted(request, response, type, data);
         }
-        else if (request.body.Digits && request.body.Digits == keys.handlerReject) {
+        else if (request.body.Digits && request.body.Digits == config.keys.handlerReject) {
             logger.info('handler-contact: rejected, to: ' + request.body.To + ', type: ' + type + ', data: ' + data + ' , CallSid: ' + request.body.CallSid);
-            publishHandlerRejected(request.body.CallSid, request.body.To);
+            publisher.publishHandlerRejected(request.body.CallSid, request.body.To);
             response.render('twiml/hang-up', { message: 'Rejected. The system will contact the next handler.' });
         }
         else {
@@ -48,7 +48,7 @@ exports.handleChoice = function(keys, publishHandlerAccepted, publishHandlerReje
             if (query) {
                 data += '?' + query;
             }
-            renderHandlerChoice(response, type, data, request.query["message"], keys, 'Unrecognised response, please try again. ');
+            renderHandlerChoice(response, type, data, request.query["message"], config, 'Unrecognised response, please try again. ');
         }
     };
 };
@@ -68,18 +68,19 @@ exports.handleReplayBrokerMessage = function() {
     };
 };
 
-function renderHandlerChoice(response, type, data, alertMessage, keys, messagePrefix) {    
+function renderHandlerChoice(response, type, data, alertMessage, config, messagePrefix) {    
     var parameters = {
-        handlerAccept: keys.handlerAccept,
-        handlerReject: keys.handlerReject,
+        handlerAccept: config.keys.handlerAccept,
+        handlerReject: config.keys.handlerReject,
         type: type,
-        data: data
+        data: data,
+        companyName: config.company.name
     };
     
     switch (type) {
     
         case "alert":
-            parameters["message"] = messagePrefix + 'An Altis alert has occurred.';
+            parameters["message"] = messagePrefix + 'An ' + config.company.name + ' alert has occurred.';
             if (alertMessage) {
                 parameters["message"] += ' ' + alertMessage + '.';
             }
@@ -87,12 +88,12 @@ function renderHandlerChoice(response, type, data, alertMessage, keys, messagePr
             break;
             
         case "connect":
-            parameters["message"] = messagePrefix + 'An Altis broker is waiting to speak with a handler.'; 
+            parameters["message"] = messagePrefix + 'An ' + config.company.name + ' broker is waiting to speak with a handler.'; 
             response.render('twiml/handler/contacted', parameters);
             break;
 
         case "message":
-            parameters["message"] = messagePrefix + 'An Altis broker has left a message.'; 
+            parameters["message"] = messagePrefix + 'An ' + config.company.name + ' broker has left a message.'; 
             response.render('twiml/handler/contacted', parameters);
             break;
             

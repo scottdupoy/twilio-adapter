@@ -8,12 +8,12 @@ exports.handleIncomingCall = function(keys) {
     };
 };
 
-exports.handleChoice = function(keys, generateGuid, publishNewBrokerCallWaiting) {
+exports.handleChoice = function(keys, generateGuid, publisher) {
     return function(request, response) {
         if (request.body.Digits && request.body.Digits == keys.brokerConnect) {
             var conferenceRoomId = 'conference-' + generateGuid();
             logger.info('broker call: broker has chosen to connect to handler, from: ' + request.body.From + ', conferenceRoomId: ' + conferenceRoomId + ', CallSid: ' + request.body.CallSid);
-            publishNewBrokerCallWaiting(request.body.CallSid, conferenceRoomId);
+            publisher.publishNewBrokerCallWaiting(request.body.CallSid, conferenceRoomId);
             response.render('twiml/broker/connecting-to-handler', { conferenceRoomId: conferenceRoomId });            
         }
         else if (request.body.Digits && request.body.Digits == keys.brokerMessage) {
@@ -27,9 +27,9 @@ exports.handleChoice = function(keys, generateGuid, publishNewBrokerCallWaiting)
     }
 };
 
-exports.handleMessage = function(publishNewBrokerMessage) {
+exports.handleMessage = function(publisher) {
     return function(request, response) {
-        publishNewBrokerMessage(request.body.CallSid, request.body.RecordingUrl);
+        publisher.publishNewBrokerMessage(request.body.CallSid, request.body.RecordingUrl);
         logger.info('broker call: broker has left a message, duration: ' + request.body.RecordingDuration + ', url: ' + request.body.RecordingUrl + ', from: ' + request.body.From + ', CallSid: ' + request.body.CallSid);
         if (request.body.CallStatus && request.body.CallStatus == "in-progress") {
             // either timedout or broker pressed a key to complete message.  need to hang-up either way.
