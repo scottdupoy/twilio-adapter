@@ -20,6 +20,7 @@ var handlerRoutes = require('./routes/handler');
 var bodyLogger = require('./middleware/bodyLogger');
 var guids = require('./utils/guids');
 var publisher = require('./utils/publisher');
+var twilioValidator = require('./middleware/twilioValidator');
 var exchange;
 
 // main app
@@ -69,6 +70,9 @@ app.use(express.methodOverride());
 
 // custom middleware for logging the request bodies
 app.use(bodyLogger.log(logger));
+
+// send a 401 for any incoming requests that don't match twilio's signature
+app.use(twilioValidator.validateTwilioSignature(config, logger));
 
 var rabbitMqPublisher = new publisher(config, logger);
 rabbitMqPublisher.rmqConnect();

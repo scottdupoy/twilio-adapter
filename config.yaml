@@ -5,11 +5,13 @@ http:
 security:
   authentication:
     enabled: true
-    method: basic
+    method: digest
   ssl:
-    passphrase: dummy-passphrase
+    passphrase: dummypassphrase
     enabled: true
-  checkTwilioHash: true
+  twilio:
+    validate: true
+    authToken: dummyauthtoken
 
 keys:
     brokerConnect: 1
