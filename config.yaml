@@ -1,6 +1,15 @@
 http:
-    listenHost: 0.0.0.0
-    listenPort: 8000
+    host: 0.0.0.0
+    port: 443
+
+security:
+  authentication:
+    enabled: true
+    method: basic
+  ssl:
+    passphrase: dummy-passphrase
+    enabled: true
+  checkTwilioHash: true
 
 keys:
     brokerConnect: 1
@@ -12,7 +21,7 @@ company:
     name: 'TestCompany'
     
 rabbitMq:
-  enabled: true
+  enabled: false
   server: localhost
   port: 5672
   vhost: /
@@ -24,7 +33,7 @@ rabbitMq:
 # log4net equivalent log levels can be debug, info, warn, error (no fatal in winston)
 logger:
   file:
-    enabled: true
+    enabled: false
     path: C:\Temp\twilio-adapter.log
     level: debug
   console:

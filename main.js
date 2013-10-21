@@ -1,9 +1,11 @@
 // dependencies
 var express = require('express');
 var http = require('http');
+var https = require('https');
 var path = require('path');
 var yaml = require('js-yaml');
-//var amqp = require('amqp');
+var auth = require('http-auth');
+var fs = require('fs');
 
 // config
 var config = require(path.join(__dirname, 'config.yaml'));
@@ -22,6 +24,29 @@ var exchange;
 
 // main app
 var app = express();
+
+// authentication
+if (config.security.authentication.enabled) {
+  if (config.security.authentication.method == 'digest') {
+    logger.info('Using DIGEST authentication');
+    var digest = auth.digest({
+      realm: 'Twilio protected area',
+      file: __dirname + '/htdigest-passwd'
+    });
+    app.use(auth.connect(digest));
+  }
+  else if (config.security.authentication.method == 'basic') {
+    logger.info('Using BASIC authentication');
+    var basic = auth.basic({
+      realm: 'Twilio protected area',
+      file: __dirname + '/htbasic-passwd'
+    });
+    app.use(auth.connect(basic));
+  }
+  else {
+    logger.error('Unknown authentication method (should be "basic" or "digest") - ' + config.security.authentication.method);
+  }
+}
 
 // config
 app.set('view engine', 'ejs');
@@ -58,6 +83,9 @@ app.use(function(request, response, next) {
 app.use(app.router);
 
 // routes
+app.get('/', function(req, res) { res.end('GET: connection working'); });
+app.post('/', function(req, res) { res.end('POST: connection working'); });
+
 app.post('/twiml/status-callback', generalRoutes.handleStatusCallback(rabbitMqPublisher));
 app.post('/twiml/broker/incoming-call', brokerRoutes.handleIncomingCall(config.keys));
 app.post('/twiml/broker/handle-choice', brokerRoutes.handleChoice(config.keys, guids.generator(), rabbitMqPublisher));
@@ -72,8 +100,26 @@ app.use(express.errorHandler());
 
 // start the server
 logger.info('starting server');
-var port = config.http.listenPort;
-var host = config.http.listenHost;
-http.createServer(app).listen(port, host, function() {
+var port = config.http.port;
+var host = config.http.host;
+
+// create the server differently depending on https enabled or not
+var server;
+if (config.security.ssl.enabled) {
+  logger.info('creating https server');
+  var credentials = {
+    key: fs.readFileSync(__dirname + '/private-key.pem'),
+    cert: fs.readFileSync(__dirname + '/public-certificate.pem'),
+    passphrase: config.security.ssl.passphrase
+  };
+  server = https.createServer(credentials, app);
+}
+else {
+  logger.info('creating http server');
+  server = http.createServer(app);
+}
+
+server.listen(port, host, function() {
     logger.info('server started and listening at ' + host + ':' + port);
 });
+
