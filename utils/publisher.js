@@ -63,7 +63,7 @@ var Publisher = function(config, logger) {
                 "$type": config.company.name + '.AlertHandler.Messages.Contact.HandlerRejectedEvent, ' + config.company.name + '.AlertHandler.Messages',
                 'CallId': callId,
                 'To': to
-            } {});
+            }, {});
         }
     };
     
