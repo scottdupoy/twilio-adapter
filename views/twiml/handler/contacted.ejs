@@ -2,8 +2,8 @@
 <Response>                                                                                                
     <Gather action="/twiml/handler/choice/<%= type %>/<%= data %>" timeout="15" method="POST" numDigits="1">
         <Say>                                                                                             
-            <%= message %> Please press <%= handlerAccept %> to accept, <%= handlerReject %> to reject or hang up if you do not work for <%= companyName %>.
-        </Say>                                                                                            
+            <%= message %> Please press <%= handlerAccept %> to accept or <%= handlerReject %> to reject. If you do not work for <%= companyName %> then please hang-up or press <%= rejectNumber %> if this number should not be called again.
+        </Say>
     </Gather>
     <Say>
         No response detected, good bye.

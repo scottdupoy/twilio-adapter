@@ -67,6 +67,17 @@ var Publisher = function(config, logger) {
         }
     };
     
+        this.publishRejectedNumber = function(callId, to) {
+        if (config.rabbitMq.enabled) {
+            logger.info('publisher: Publishing RejectedNumberEvent, to: ' + to);
+            self.exchange.publish('Contact.RejectedNumber', {
+                "$type": config.company.name + '.AlertHandler.Messages.Contact.RejectedNumberEvent, ' + config.company.name + '.AlertHandler.Messages',
+                'CallId': callId,
+                'To': to
+            }, {});
+        }
+    };
+    
     this.rmqConnect = function() {
         if (!config.rabbitMq.enabled) {
             logger.info('publisher: rabbitmq disabled, not connecting to broker.');

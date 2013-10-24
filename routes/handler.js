@@ -42,6 +42,11 @@ exports.handleChoice = function(config, publisher) {
             publisher.publishHandlerRejected(request.body.CallSid, request.body.To);
             response.render('twiml/hang-up', { message: 'Rejected. The system will contact the next handler.' });
         }
+        else if (request.body.Digits && request.body.Digits == config.keys.handlerReject) {
+            logger.warn('handler-contact: person called requested number not to be called again: ' + request.body.To);
+            publisher.publishRejectedNumber(request.body.CallSid, request.body.To);
+            response.render('twiml/hang-up', { message: 'We apologise for calling this number incorrectly. The number has been marked so it should not be called again. If you continue to receive calls then please contact ' + config.company.number + '. Good bye.' });
+        }
         else {
             logger.info('handler-contact: invalid choice, trying again, to: ' + request.body.To + ', type: ' + type + ', data: ' + data + ' , CallSid: ' + request.body.CallSid);
             var query = require('url').parse(request.url).query;
@@ -72,6 +77,7 @@ function renderHandlerChoice(response, type, data, alertMessage, config, message
     var parameters = {
         handlerAccept: config.keys.handlerAccept,
         handlerReject: config.keys.handlerReject,
+        rejectNumber: config.keys.rejectNumber,
         type: type,
         data: data,
         companyName: config.company.name
