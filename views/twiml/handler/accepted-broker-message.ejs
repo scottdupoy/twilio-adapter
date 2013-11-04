@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <Response>                                                                                                
-    <Say>
+    <Say voice='alice' language='en-gb'>
         Broker message accepted. Playing message.
     </Say>
     <Play><%= messageUrl %></Play>
-    <Say>
+    <Say voice='alice' language='en-gb'>
         Broker message finished.
     </Say>                                                                                              
     <Gather action='/twiml/handler/replay-broker-message/<%= data %>' timeout='12' method='POST' numDigits='1'>                             
-        <Say>                                                                                             
+        <Say voice='alice' language='en-gb'>                                                                                             
             Press any key to replay the message or hang-up to finish.
         </Say>                                                                                            
     </Gather>

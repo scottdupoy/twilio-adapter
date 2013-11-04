@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <Response>                      
-    <Say>
+    <Say voice='alice' language='en-gb'>
         Please leave a message after the tone. Hang up or press a key to finish.
     </Say>
     <Record action='/twiml/broker/handle-message' method='POST' timeout='15' maxLength='300'/>
-    <Say>
+    <Say voice='alice' language='en-gb'>
         No message detected. Good bye.
     </Say>
     <Hangup/>

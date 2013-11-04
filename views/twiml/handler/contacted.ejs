@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <Response>                                                                                                
     <Gather action="/twiml/handler/choice/<%= type %>/<%= data %>" timeout="15" method="POST" numDigits="1">
-        <Say>                                                                                             
+        <Say voice='alice' language='en-gb'>
             <%= message %> Please press <%= handlerAccept %> to accept or <%= handlerReject %> to reject. If you do not work for <%= companyName %> then please hang-up or if this number should not be called again then press <%= rejectNumber %>.
         </Say>
     </Gather>
-    <Say>
+    <Say voice='alice' language='en-gb'>
         No response detected, good bye.
     </Say>
     <Hangup/>
